@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة تكاليف البناء</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-shawn">شَوْن</div>
+        </header>
+
+        <main>
+            <!-- Project Management Panel -->
+            <div class="project-management-section" id="projectManagementSection">
+                <h2 class="panel-title">إدارة المشاريع</h2>
+                <form id="projectForm" class="project-form">
+                    <input type="text" id="projectName" placeholder="اسم المشروع" required>
+                    <input type="text" id="projectCode" placeholder="كود المشروع" required>
+                    <select id="projectType" required>
+                        <option value="">نوع المشروع</option>
+                        <option value="فيلا">فيلا</option>
+                        <option value="شقة">شقة</option>
+                        <option value="دوبلكس">دوبلكس</option>
+                    </select>
+                    <input type="number" id="projectArea" placeholder="المساحة (م2)" min="1" required>
+                    <input type="number" id="projectFloor" placeholder="عدد الأدوار" min="1" required>
+                    <button type="submit" id="createProjectBtn">إنشاء مشروع</button>
+                </form>
+                <div id="projectsList" class="projects-list">
+                    <!-- List of projects will be rendered here -->
+                </div>
+                <div id="currentProjectDisplay" class="current-project-display">
+                    <!-- Current project info will be shown here -->
+                </div>
+            </div>
+
+            <!-- Collapsible Panel: أسعار الموارد -->
+            <div class="collapsible-panel" id="pricesPanel">
+                <div class="collapsible-header" id="pricesPanelHeader">
+                    <span>أسعار الموارد</span>
+                    <button class="collapsible-toggle" aria-expanded="false">+</button>
+                </div>
+                <div class="collapsible-content" id="pricesPanelContent" style="display:none;">
+                    <div class="prices-section">
+                        <h2>أسعار الموارد</h2>
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="materials">الخامات</button>
+                            <button class="tab-btn" data-tab="workmanship">المصنعيات</button>
+                            <button class="tab-btn" data-tab="labor">العمالة</button>
+                        </div>
+
+                        <div class="tab-content active" id="materials-tab">
+                            <div class="prices-grid" id="materials-grid">
+                                <!-- Materials prices will be loaded here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="workmanship-tab">
+                            <div class="prices-grid" id="workmanship-grid">
+                                <!-- Workmanship prices will be loaded here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="labor-tab">
+                            <div class="prices-grid" id="labor-grid">
+                                <!-- Labor prices will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible Panel: إدخال الكميات -->
+            <div class="collapsible-panel" id="inputPanel">
+                <div class="collapsible-header" id="inputPanelHeader">
+                    <span>إدخال الكميات</span>
+                    <button class="collapsible-toggle" aria-expanded="false">+</button>
+                </div>
+                <div class="collapsible-content" id="inputPanelContent" style="display:none;">
+                    <div class="input-panel">
+                        <h2 class="panel-title">إدخال الكميات</h2>
+                        <div class="calculator-section">
+                            <div class="form-group">
+                                <label for="mainItemSelect">البند الرئيسي:</label>
+                                <select id="mainItemSelect" required>
+                                    <option value="">-- اختر البند الرئيسي --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subItemSelect">البند الفرعي:</label>
+                                <select id="subItemSelect" required disabled>
+                                    <option value="">-- اختر البند الفرعي --</option>
+                                </select>
+                            </div>
+                            <div class="form-group triple-input-group">
+                                <label for="quantityInput">الكمية:</label>
+                                <input type="number" id="quantityInput" min="0.01" step="0.01" placeholder="" required>
+                                <label for="wastePercentInput">نسبة الهالك:</label>
+                                <input type="number" id="wastePercentInput" min="0" step="0.01" placeholder="%">
+                                <label for="operationPercentInput">نسبة التشغيل:</label>
+                                <input type="number" id="operationPercentInput" min="0" step="0.01" placeholder="%">
+                            </div>
+                        </div>
+                        <div class="results-section" id="resultsSection" style="display: none;">
+                            <h2>تفاصيل التكلفة</h2>
+                            <div class="accordion" id="costDetailsAccordion">
+                                <div class="accordion-item" id="materialsAccordion">
+                                    <div class="accordion-header" id="materialsHeader">
+                                        <span class="section-title">الخامات</span>
+                                        <span class="section-desc" id="materialsDesc"></span>
+                                        <span class="section-total" id="materialsTotal"></span>
+                                        <button class="accordion-toggle" aria-expanded="false">+</button>
+                                    </div>
+                                    <div class="accordion-body" id="materialsBody" style="display: none;">
+                                        <div class="table-container">
+                                            <table id="materialsTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>الخامة</th>
+                                                        <th>الكمية المطلوبة</th>
+                                                        <th>الوحدة</th>
+                                                        <th>سعر الوحدة</th>
+                                                        <th>التكلفة</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item" id="workmanshipAccordion">
+                                    <div class="accordion-header" id="workmanshipHeader">
+                                        <span class="section-title">المصنعيات</span>
+                                        <span class="section-desc" id="workmanshipDesc"></span>
+                                        <span class="section-total" id="workmanshipTotal"></span>
+                                        <button class="accordion-toggle" aria-expanded="false">+</button>
+                                    </div>
+                                    <div class="accordion-body" id="workmanshipBody" style="display: none;">
+                                        <div class="table-container">
+                                            <table id="workmanshipTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>المصنعية</th>
+                                                        <th>الكمية المطلوبة</th>
+                                                        <th>الوحدة</th>
+                                                        <th>سعر الوحدة</th>
+                                                        <th>التكلفة</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item" id="laborAccordion">
+                                    <div class="accordion-header" id="laborHeader">
+                                        <span class="section-title">العمالة</span>
+                                        <span class="section-desc" id="laborDesc"></span>
+                                        <span class="section-total" id="laborTotal"></span>
+                                        <button class="accordion-toggle" aria-expanded="false">+</button>
+                                    </div>
+                                    <div class="accordion-body" id="laborBody" style="display: none;">
+                                        <div class="table-container">
+                                            <table id="laborTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>العمالة</th>
+                                                        <th>الكمية المطلوبة</th>
+                                                        <th>الوحدة</th>
+                                                        <th>سعر الوحدة</th>
+                                                        <th>التكلفة</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="total-section">
+                            <div class="total-row">
+                                <span class="unit-price" id="unitPriceDisplay"></span>
+                                <span class="total-separator" aria-hidden="true"></span>
+                                <span class="total-capsule">
+                                    <span class="label">التكلفة الإجمالية:</span>
+                                    <span class="value"><span id="totalCost" class="total-value">0.00</span> جنيه</span>
+                                </span>
+                                <button id="saveItemBtn" class="save-item-btn">حفظ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible Panel: البنود -->
+            <div class="collapsible-panel" id="summaryPanel">
+                <div class="collapsible-header" id="summaryPanelHeader">
+                    <span>البنود</span>
+                    <button class="collapsible-toggle" aria-expanded="false">+</button>
+                </div>
+                <div class="collapsible-content" id="summaryPanelContent" style="display:none;">
+                    <div class="summary-section" id="summarySection">
+                        <h2 class="panel-title">البنود</h2>
+                        <div class="selection-controls">
+                            <div class="select-all-section">
+                                <input type="checkbox" id="selectAllCheckbox" class="select-all-checkbox">
+                                <label for="selectAllCheckbox">تحديد الكل</label>
+                            </div>
+                            <div class="selection-info">
+                                <span id="selectionCount">0</span> من <span id="totalItems">0</span> عنصر محدد
+                            </div>
+                        </div>
+                        <button id="exportSummaryHtmlBtn" class="export-html-btn">Export</button>
+                        <button id="summaryUndoBtn" class="summary-undo-btn" style="display:none;" title="تراجع عن الحذف">
+                            <span class="undo-icon">&#8630;</span>
+                        </button>
+                        <div id="summaryCards" class="summary-cards"></div>
+                        <div class="summary-total" id="summaryTotal"></div>
+                        <div class="summary-selling-total" id="summarySellingTotal"></div>
+                        <div class="supervision-section">
+                            <div class="supervision-input-group">
+                                <label for="supervisionPercentage">نسبة الاشراف (%)</label>
+                                <input type="number" id="supervisionPercentage" min="0" step="0.01" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="summary-final-total" id="summaryFinalTotal"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible Panel: إدارة الموارد -->
+            <div class="collapsible-panel" id="resourcesPanel">
+                <div class="collapsible-header" id="resourcesPanelHeader">
+                    <span>إدارة الموارد</span>
+                    <button class="collapsible-toggle" aria-expanded="false">+</button>
+                </div>
+                <div class="collapsible-content" id="resourcesPanelContent" style="display:none;">
+                    <div class="resources-section" id="resourcesSection">
+                        <h2 class="panel-title">إدارة الموارد</h2>
+                        <button id="exportResourcesHtmlBtn" class="export-html-btn">Export</button>
+                        <div class="resources-accordion" id="resourcesAccordion">
+                            <div class="accordion-item" id="resourcesMaterialsAccordion">
+                                <div class="accordion-header" id="resourcesMaterialsHeader">
+                                    <span class="section-title">الخامات</span>
+                                    <button class="accordion-toggle" aria-expanded="false">+</button>
+                                </div>
+                                <div class="accordion-body" id="resourcesMaterialsBody" style="display: none;"></div>
+                            </div>
+                            <div class="accordion-item" id="resourcesWorkmanshipAccordion">
+                                <div class="accordion-header" id="resourcesWorkmanshipHeader">
+                                    <span class="section-title">المصنعيات</span>
+                                    <button class="accordion-toggle" aria-expanded="false">+</button>
+                                </div>
+                                <div class="accordion-body" id="resourcesWorkmanshipBody" style="display: none;"></div>
+                            </div>
+                            <div class="accordion-item" id="resourcesLaborAccordion">
+                                <div class="accordion-header" id="resourcesLaborHeader">
+                                    <span class="section-title">العمالة</span>
+                                    <button class="accordion-toggle" aria-expanded="false">+</button>
+                                </div>
+                                <div class="accordion-body" id="resourcesLaborBody" style="display: none;"></div>
+                            </div>
+                        </div>
+                        <div class="resources-total-section">
+                            <div class="resources-total-row">
+                                <div class="resource-total-item">
+                                    <span class="label">إجمالي الخامات:</span>
+                                    <span class="value" id="resourcesMaterialsTotal">0.00 جنيه</span>
+                                </div>
+                                <div class="resource-total-item">
+                                    <span class="label">إجمالي المصنعيات:</span>
+                                    <span class="value" id="resourcesWorkmanshipTotal">0.00 جنيه</span>
+                                </div>
+                                <div class="resource-total-item">
+                                    <span class="label">إجمالي العمالة:</span>
+                                    <span class="value" id="resourcesLaborTotal">0.00 جنيه</span>
+                                </div>
+                                <div class="resource-total-item total">
+                                    <span class="label">المجموع الكلي:</span>
+                                    <span class="value" id="resourcesGrandTotal">0.00 جنيه</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="itemDetailsModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal" id="closeItemDetailsModal">&times;</span>
+            <h2 id="itemDetailsTitle"></h2>
+            <div id="itemDetailsContent"></div>
+        </div>
+    </div>
+
+    <script type="module" src="calculator.js"></script>
+</body>
+</html> 
