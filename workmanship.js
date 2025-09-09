@@ -1,4 +1,4 @@
-export const workmanshipList = [
+export let workmanshipList = [
   {
     "Resource": "مصنعية طوب طفلي 20 9 5",
     "Unit": "1000 طوبة",
@@ -443,4 +443,26 @@ export const workmanshipList = [
     "Unit Cost": NaN,
     "Type": "مصنعيات"
   }
+  ,
+  // مصنعية صحية
+  { "Resource": "حمام الماستر", "Unit": "يومية", "Unit Cost": 6000.00, "Type": "مصنعيات" },
+  { "Resource": "حمام الضيوف", "Unit": "حمام", "Unit Cost": 3000.00, "Type": "مصنعيات" },
+  { "Resource": "المطبخ", "Unit": "يومية", "Unit Cost": 3000.00, "Type": "مصنعيات" },
+  { "Resource": "الأوفيس", "Unit": "عربية", "Unit Cost": 3000.00, "Type": "مصنعيات" },
+  { "Resource": "تأسيس شاور", "Unit": "نقطة", "Unit Cost": 1400.00, "Type": "مصنعيات" },
+  { "Resource": "تأسيس حوض", "Unit": "نقطة", "Unit Cost": 1450.00, "Type": "مصنعيات" },
+  { "Resource": "تأسيس قعدة عادية", "Unit": "نقطة", "Unit Cost": 1750.00, "Type": "مصنعيات" },
+  { "Resource": "تأسيس خزان دفن", "Unit": "نقطة", "Unit Cost": 0.00, "Type": "مصنعيات" },
+  { "Resource": "تأسيس سخان", "Unit": "نقطة", "Unit Cost": 675.00, "Type": "مصنعيات" },
+  { "Resource": "Mixer عادي بارد ساخن", "Unit": "نقطة", "Unit Cost": 0.00, "Type": "مصنعيات" },
+  { "Resource": "بيبة 15*15", "Unit": "نقطة", "Unit Cost": 350.00, "Type": "مصنعيات" },
+  { "Resource": "بيبة 10*10", "Unit": "نقطة", "Unit Cost": 350.00, "Type": "مصنعيات" },
+  { "Resource": "جريلة 65", "Unit": "نقطة", "Unit Cost": 0.00, "Type": "مصنعيات" },
+  { "Resource": "جريلة 35", "Unit": "نقطة", "Unit Cost": 0.00, "Type": "مصنعيات" },
+  { "Resource": "محبس دفن", "Unit": "نقطة", "Unit Cost": 0.00, "Type": "مصنعيات" },
+  { "Resource": "صرف تكييف", "Unit": "نقطة", "Unit Cost": 400.00, "Type": "مصنعيات" },
+  { "Resource": "تأسيس غسالة ملابس", "Unit": "نقطة", "Unit Cost": 675.00, "Type": "مصنعيات" },
+  { "Resource": "تأسيس غسالة أطباق", "Unit": "نقطة", "Unit Cost": 675.00, "Type": "مصنعيات" },
+  { "Resource": "محبس زاوية", "Unit": "نقطة", "Unit Cost": 0.00, "Type": "مصنعيات" }
 ];
+// Keep all new sectors including الصحية

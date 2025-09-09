@@ -329,14 +329,15 @@ class ConstructionCalculator {
 
     loadMainItems() {
         // Get unique main items from itemsList
-        const mainItems = [...new Set(itemsList.map(item => item['Main Item']))];
+        const mainItems = [...new Set(itemsList.map(item => item['Main Item']))]
+            .filter(name => name !== 'تأسيس سباكة');
         
         // Custom desired order (these appear first in this exact order)
         const desiredOrder = [
             'الهدم',
             'المباني',
             'تأسيس كهرباء',
-            'تأسيس سباكة',
+            'تأسيس صحي',
             'العزل',
             'تأسيس تكييفات',
             'المحارة',
@@ -369,7 +370,7 @@ class ConstructionCalculator {
         this.subItemSelect.disabled = false;
 
         const subItems = itemsList
-            .filter(item => item['Main Item'] === mainItem)
+            .filter(item => item['Main Item'] === mainItem && mainItem !== 'تأسيس سباكة')
             .map(item => item['Sub Item'])
             .filter((value, index, self) => self.indexOf(value) === index);
 
@@ -496,7 +497,8 @@ class ConstructionCalculator {
             { title: 'خامات نقاشة' },
             { title: 'خامات جبسوم بورد' },
             { title: 'خامات كهرباء' },
-            { title: 'خامات سباكة' }
+            { title: 'خامات صحية' }
+            // removed: { title: 'خامات سباكة' }
         ];
 
         // Create sections
@@ -516,7 +518,7 @@ class ConstructionCalculator {
             { title: 'مصنعية جبسوم بورد' },
             { title: 'مصنعية نقاشة' },
             { title: 'مصنعية كهرباء' },
-            { title: 'مصنعية سباكة' }
+            { title: 'مصنعية صحية' }
         ];
 
         // Create sections
@@ -543,8 +545,8 @@ class ConstructionCalculator {
     createSectorSection(title) {
         let count = 0;
         // Determine the type of sector and get the count
-        const materialsSectors = ['خامات أساسية', 'خامات بورسلين', 'خامات عزل', 'خامات نقاشة', 'خامات جبسوم بورد', 'خامات كهرباء', 'خامات سباكة'];
-        const workmanshipSectors = ['مصنعيات مدنية', 'مصنعية تأسيس تكييف', 'مصنعية عزل', 'مصنعية بورسلين', 'مصنعية جبسوم بورد', 'مصنعية نقاشة', 'مصنعية كهرباء', 'مصنعية سباكة'];
+        const materialsSectors = ['خامات أساسية', 'خامات بورسلين', 'خامات عزل', 'خامات نقاشة', 'خامات جبسوم بورد', 'خامات كهرباء', 'خامات صحية'];
+        const workmanshipSectors = ['مصنعيات مدنية', 'مصنعية تأسيس تكييف', 'مصنعية عزل', 'مصنعية بورسلين', 'مصنعية جبسوم بورد', 'مصنعية نقاشة', 'مصنعية كهرباء', 'مصنعية صحية'];
         const laborSectors = ['معدات', 'عمالة'];
         if (materialsSectors.includes(title)) {
             count = this.getMaterialsForSector(title).length;
@@ -604,8 +606,8 @@ class ConstructionCalculator {
         document.body.appendChild(searchInterface);
         
         // Determine if this is a materials, workmanship, or labor sector
-        const materialsSectors = ['خامات أساسية', 'خامات بورسلين', 'خامات عزل', 'خامات نقاشة', 'خامات جبسوم بورد', 'خامات كهرباء', 'خامات سباكة'];
-        const workmanshipSectors = ['مصنعيات مدنية', 'مصنعية تأسيس تكييف', 'مصنعية عزل', 'مصنعية بورسلين', 'مصنعية جبسوم بورد', 'مصنعية نقاشة', 'مصنعية كهرباء', 'مصنعية سباكة'];
+        const materialsSectors = ['خامات أساسية', 'خامات بورسلين', 'خامات عزل', 'خامات نقاشة', 'خامات جبسوم بورد', 'خامات كهرباء', 'خامات صحية'];
+        const workmanshipSectors = ['مصنعيات مدنية', 'مصنعية تأسيس تكييف', 'مصنعية عزل', 'مصنعية بورسلين', 'مصنعية جبسوم بورد', 'مصنعية نقاشة', 'مصنعية كهرباء', 'مصنعية صحية'];
         const laborSectors = ['معدات', 'عمالة'];
         
         const isMaterialsSector = materialsSectors.includes(title);
@@ -800,11 +802,17 @@ class ConstructionCalculator {
                 'صواعد دش', 'صواعد نت', 'لوحة 12 خط', 'لوحة 18 خط', 'لوحة 24 خط',
                 'لوحة 36 خط', 'لوحة 48 خط', 'مخرج إضاءة', 'مخرج إضاءة درج', 'مخرج سماعة'
             ],
-            'خامات سباكة': [
-                'بارد', 'بيبة 15 سم', 'بيبة 30 سم', 'بيبة 65 سم', 'تأسيس خزان',
-                'تأسيس غلاية', 'تأسيس موتور', 'جيت شاور', 'جيت شاور دفن',
-                'خزان دفن', 'خلاط دفن 1 مخرج', 'خلاط دفن 2 مخرج', 'خلاط دفن 3 مخرج',
-                'ساخن بارد', 'صرف تكييف', 'محبس دفن'
+            'خامات صحية': [
+                'مواسير تغذية بولي 1.5 بوصة', 'مواسير تغذية بولي 1 بوصة', 'مواسير تغذية بولي 3/4 بوصة',
+                'خزان دفن', 'جسم دفن 1 مخرج', 'جسم دفن شاور 2 مخرج', 'جسم دفن شاور 3 مخرج', 'جسم دفن حوض 2 مخرج',
+                'جيت شاور دفن', 'كوع سن داخلي', 'كوع لحام', 'T لحام', 'كرنك', 'طبة إختبار', 'أفيز',
+                'جلبة سن داخلي', 'جلبة سن خارجي', 'T سن داخلي', 'محبس دفن', 'تيفلون بكرة', 'نبل', 'وصلة لي',
+                'مواسير صرف 4 بوصة', 'مواسير صرف 3 بوصة', 'مواسير صرف 1.5 بوصة', 'مواسير صرف 1 بوصة',
+                'كوع مفتوح 45 * 4 بوصة', 'كوع مفتوح 45 * 3 بوصة', 'كوع مفتوح 45 * 1.5 بوصة', 'كوع مفتوح 45 * 1 بوصة',
+                'كوع مقفول 90 * 4 بوصة', 'كوع مقفول 90 * 3 بوصة', 'كوع مقفول 90 * 1.5 بوصة', 'كوع مقفول 90 * 1 بوصة',
+                'جلبة 4 بوصة', 'جلبة 3 بوصة', 'جلبة 1.5 بوصة', 'جلبة 1 بوصة',
+                'بيبة كيسيل 15*15', 'بيبة كيسيل 10*10', 'بيبة كيسيل 6.5*65', 'بيبة كيسيل 6.5*35',
+                'محبس زاوية سمارت هوم', 'جلب تطويل ألماني', 'وش نيكل صيني'
             ]
         };
         
@@ -844,11 +852,11 @@ class ConstructionCalculator {
                 'مصنعية لوحة 36 خط', 'مصنعية لوحة 48 خط', 'مصنعية صواعد 16 مل', 'مصنعية صواعد نت',
                 'مصنعية صواعد تليفون', 'مصنعية صواعد دش'
             ],
-            'مصنعية سباكة': [
-                'مصنعية ساخن بارد', 'مصنعية بارد', 'مصنعية بيبة 15 سم', 'مصنعية بيبة 30 سم', 'مصنعية بيبة 65 سم',
-                'مصنعية خزان دفن', 'مصنعية خلاط دفن 1 مخرج', 'مصنعية خلاط دفن 2 مخرج', 'مصنعية خلاط دفن 3 مخرج',
-                'مصنعية جيت شاور', 'مصنعية جيت شاور دفن', 'مصنعية صرف تكييف', 'مصنعية محبس دفن',
-                'مصنعية تأسيس موتور', 'مصنعية تأسيس غلاية', 'مصنعية تأسيس خزان'
+            'مصنعية صحية': [
+                'حمام الماستر', 'حمام الضيوف', 'المطبخ', 'الأوفيس',
+                'تأسيس شاور', 'تأسيس حوض', 'تأسيس قعدة عادية', 'تأسيس خزان دفن', 'تأسيس سخان',
+                'Mixer عادي بارد ساخن', 'بيبة 15*15', 'بيبة 10*10', 'جريلة 65', 'جريلة 35',
+                'محبس دفن', 'صرف تكييف', 'تأسيس غسالة ملابس', 'تأسيس غسالة أطباق', 'محبس زاوية'
             ]
         };
         const workmanshipNames = sectorWorkmanship[sectorTitle] || [];
@@ -2707,10 +2715,11 @@ class ConstructionCalculator {
             if (subNormN.includes('صواعد')) return 'مط';
             return 'نقطة';
         }
-        // Special cases for تأسيس سباكة
-        if (mainItem.includes('تأسيس سباكة') || mainNorm.includes('تأسيس سباكة') || mainNormN.includes('تاسيس سباكة')) return 'نقطة';
+        // removed: تأسيس سباكة
         // Special cases for تأسيس تكييف
         if (mainItem.includes('تأسيس تكييف') || mainNorm.includes('تأسيس تكييف') || mainNorm.includes('تكييفات') || mainNormN.includes('تاسيس تكييف')) return 'مط';
+        // Special cases for تأسيس صحي
+        if (mainItem.includes('تأسيس صحي') || mainNorm.includes('تأسيس صحي') || mainNormN.includes('تاسيس صحي')) return 'نقطة';
         // Special cases for عزل
         if (mainItem.includes('عزل') || mainNorm.includes('عزل') || mainNormN.includes('عزل')) return 'م2';
         // المتر المسطح الافتراضي لفئات معينة (مع وبدون "ال")
@@ -2741,6 +2750,12 @@ class ConstructionCalculator {
             if (quantityInput) {
                 quantity = parseFloat(quantityInput.value) || 0;
             }
+            // Read card-level waste/operation percentages to align totals with البنود
+            const wasteInput = card.querySelector('.waste-input');
+            const operationInput = card.querySelector('.operation-input');
+            const wastePercent = wasteInput ? (parseFloat(wasteInput.value) || 0) : 0;
+            const operationPercent = operationInput ? (parseFloat(operationInput.value) || 0) : 0;
+            const adjustmentFactor = 1 + (wastePercent / 100) + (operationPercent / 100);
             // Find the main/sub item in itemsList
             let mainItem = '', subItem = '';
             if (itemTitle.includes(' - ')) {
@@ -2755,7 +2770,8 @@ class ConstructionCalculator {
                 const amount = (parseFloat(item['Quantity per Unit']) || 0) * quantity;
                 // Use the active price (respects customPrices and default list prices)
                 const pricePerUnit = this.getResourcePrice(resource, type) || 0;
-                const cost = amount * pricePerUnit;
+                const baseCost = amount * pricePerUnit;
+                const cost = baseCost * adjustmentFactor;
                 if (!summary[resource]) {
                     summary[resource] = {
                         type,
@@ -3032,7 +3048,9 @@ class ConstructionCalculator {
         this.laborFloorLevel = proj.laborFloorLevel || 1;
         // 2. Summary items
         this.summaryCards.innerHTML = '';
-        (proj.items || []).forEach(cardData => this.addSummaryCard(cardData));
+        (proj.items || [])
+            .filter(cardData => cardData.mainItem !== 'تأسيس سباكة')
+            .forEach(cardData => this.addSummaryCard(cardData));
         
         // Ensure all loaded cards have proper sellPrice in dataset
         this.ensureAllCardsHaveSellPrice();
